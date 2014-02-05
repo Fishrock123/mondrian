@@ -129,8 +129,28 @@ compileCoffee = (src, outputFile = "#{ROOT_BUILD_DIRECTORY}/assets/javascript/bu
         throw err
       callback()
 
+compileAppcache = ->
+  old = fs.readFileSync 'build/app/mondrian.appcache', 'utf8'
+  return console.log('ERROR: no appcache') unless old
+  buildno = parseInt(/^# Revision (\d+)$/m.exec(old)[1]) + 1
+  next = old.replace /^# Revision \d+$/m, '# Revision ' + buildno
+  sha = getGitHeadSHA()
+  next = next.replace /^# SHA \w+$/m, '# SHA ' + sha
+  next = next.replace /^# Date: .+$/m, '# Date: ' + new Date().toDateString()
+  fs.writeFile 'build/app/mondrian.appcache', next
+
+getGitHeadSHA = ->
+  ref = fs.readFileSync '.git/HEAD', 'utf8'
+  return console.log('not a string??') if typeof ref isnt "string"
+
+  sha = fs.readFileSync '.git/' + ref.slice(4, ref.length).trim(), 'utf8'
+  return console.log('not a string??') if typeof sha isnt "string"
+
+  sha.trim()
 
 task 'build', 'Build project', ->
+  compileAppcache()
+
   compileCSS([
     { source: 'src/less/ui.less',           dest: "#{ROOT_BUILD_DIRECTORY}/assets/style/app.css" }
     { source: 'src/less/embed.less',        dest: "#{ROOT_BUILD_DIRECTORY}/assets/style/embed.css" }

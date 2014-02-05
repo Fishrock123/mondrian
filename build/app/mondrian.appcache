@@ -1,5 +1,8 @@
 CACHE MANIFEST
-# Revision 7dd6dff5ec4ce72bcaf38d2739b9f697f8b0ff4f
+# Revision 8
+# SHA c7b75a2056afdcef2b9e9ccacd3d2746d8894778
+# Date: Wed Feb 05 2014
+
 /assets/vendor/jquery-2.1.0.min.js
 /assets/vendor/md5.min.js
 /assets/vendor/jquery.tinysort.min.js
